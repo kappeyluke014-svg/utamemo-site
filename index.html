@@ -4,86 +4,256 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>うたメモ — ずっと残る、あなたのカラオケ記録</title>
-<meta name="description" content="カラオケの点数・キー・歌声をぜんぶ残す。あなたのカラオケアルバムをつくるアプリ「うたメモ」。">
+<meta name="description" content="カラオケの点数・キー・歌声をぜんぶ残す。曲管理・カラオケ記録・録音・統計をひとつに。あなたのカラオケアルバムをつくるアプリ「うたメモ」。">
 <meta property="og:title" content="うたメモ — ずっと残る、あなたのカラオケ記録">
 <meta property="og:description" content="点数もキーも、録音した歌声も。あなたのカラオケアルバムをつくろう。">
 <meta property="og:type" content="website">
+<meta property="og:image" content="./assets/screen-songs.png">
+<meta name="theme-color" content="#0F0D12">
 <style>
   :root{
     --pink:#FF4E8B; --coral:#FF9A4D;
-    --ink:#1a1620; --muted:#6b6470; --bg:#0F0D12;
+    --bg:#0B0910; --bg2:#13101A;
+    --ink:#fff; --muted:#a59eac;
   }
   *{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:-apple-system,"Hiragino Sans","Helvetica Neue",sans-serif;color:#fff;background:var(--bg);line-height:1.7;-webkit-font-smoothing:antialiased}
+  html{scroll-behavior:smooth}
+  body{font-family:-apple-system,"Hiragino Sans","Helvetica Neue",sans-serif;color:var(--ink);background:var(--bg);line-height:1.75;-webkit-font-smoothing:antialiased;overflow-x:hidden}
   a{color:inherit}
-  .wrap{max-width:880px;margin:0 auto;padding:0 24px}
+  .wrap{max-width:1040px;margin:0 auto;padding:0 24px}
+  .grad-text{background:linear-gradient(120deg,var(--pink),var(--coral));-webkit-background-clip:text;background-clip:text;color:transparent}
 
-  /* Hero */
-  .hero{position:relative;text-align:center;padding:88px 24px 72px;overflow:hidden}
-  .hero::before{content:"";position:absolute;inset:0;background:
-     radial-gradient(60% 50% at 50% 0%, rgba(255,78,139,.35), transparent 70%),
-     radial-gradient(50% 40% at 80% 20%, rgba(255,154,77,.25), transparent 70%);
-     pointer-events:none}
-  .badge{position:relative;display:inline-block;font-size:13px;letter-spacing:.08em;color:#ffd0e0;border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:6px 14px;margin-bottom:24px}
-  .icon{position:relative;width:96px;height:96px;border-radius:22px;margin:0 auto 22px;background:linear-gradient(135deg,var(--pink),var(--coral));display:flex;align-items:center;justify-content:center;font-size:48px;box-shadow:0 16px 40px rgba(255,78,139,.4)}
-  h1{position:relative;font-size:40px;font-weight:800;letter-spacing:.01em;line-height:1.3}
-  .hero p{position:relative;color:#cfc8d6;font-size:18px;margin-top:16px}
-  .cta{position:relative;display:inline-flex;gap:10px;align-items:center;margin-top:32px;background:linear-gradient(135deg,var(--pink),var(--coral));color:#fff;font-weight:700;text-decoration:none;padding:15px 30px;border-radius:14px;box-shadow:0 12px 30px rgba(255,78,139,.45)}
-  .cta.secondary{background:transparent;border:1px solid rgba(255,255,255,.25);box-shadow:none;margin-left:10px}
+  /* ===== Phone frame ===== */
+  .phone{position:relative;width:248px;flex:0 0 248px;aspect-ratio:1179/2556;border-radius:38px;
+    background:#000;padding:9px;box-shadow:0 30px 70px rgba(0,0,0,.55),0 0 0 1px rgba(255,255,255,.08);}
+  .phone img{width:100%;height:100%;object-fit:cover;border-radius:30px;display:block}
+  .phone::after{content:"";position:absolute;top:14px;left:50%;transform:translateX(-50%);
+    width:78px;height:22px;background:#000;border-radius:14px;z-index:2}
 
-  /* Concept */
-  .concept{text-align:center;padding:64px 24px;background:rgba(255,255,255,.03)}
-  .concept h2{font-size:26px;font-weight:800;margin-bottom:14px}
-  .concept p{color:#cfc8d6;max-width:620px;margin:0 auto}
+  /* ===== Hero ===== */
+  .hero{position:relative;padding:72px 0 56px;overflow:hidden}
+  .hero::before{content:"";position:absolute;inset:-10% -20% auto;height:620px;pointer-events:none;
+    background:radial-gradient(50% 60% at 30% 0%,rgba(255,78,139,.40),transparent 70%),
+              radial-gradient(45% 55% at 85% 15%,rgba(255,154,77,.30),transparent 70%)}
+  .hero-inner{position:relative;display:flex;gap:40px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+  .hero-copy{flex:1 1 380px;min-width:300px}
+  .badge{display:inline-block;font-size:13px;letter-spacing:.08em;color:#ffd0e0;border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:6px 14px;margin-bottom:22px;backdrop-filter:blur(4px)}
+  .app-row{display:flex;align-items:center;gap:14px;margin-bottom:22px}
+  .app-icon{width:64px;height:64px;border-radius:16px;background:linear-gradient(135deg,var(--pink),var(--coral));display:flex;align-items:center;justify-content:center;font-size:34px;box-shadow:0 10px 28px rgba(255,78,139,.45)}
+  .app-name{font-size:20px;font-weight:800}
+  .app-name span{display:block;font-size:13px;font-weight:500;color:var(--muted)}
+  h1{font-size:46px;font-weight:900;letter-spacing:.01em;line-height:1.25}
+  .hero-copy .lead{color:#d6cfdd;font-size:18px;margin-top:18px;max-width:460px}
+  .cta-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:30px}
+  .cta{display:inline-flex;gap:8px;align-items:center;background:linear-gradient(135deg,var(--pink),var(--coral));color:#fff;font-weight:800;text-decoration:none;padding:15px 28px;border-radius:14px;box-shadow:0 14px 32px rgba(255,78,139,.45);transition:transform .15s}
+  .cta:hover{transform:translateY(-2px)}
+  .cta.ghost{background:transparent;border:1px solid rgba(255,255,255,.22);box-shadow:none;font-weight:700}
+  .hero-phones{flex:0 0 auto;display:flex;gap:-40px;position:relative}
+  .hero-phones .phone:nth-child(2){margin-left:-86px;margin-top:42px;transform:rotate(4deg);width:228px;flex-basis:228px}
+  .hero-phones .phone:nth-child(1){transform:rotate(-4deg);z-index:2}
 
-  /* Features */
-  .features{padding:64px 0}
-  .features h2{text-align:center;font-size:24px;font-weight:800;margin-bottom:36px}
-  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
-  @media(max-width:640px){.grid{grid-template-columns:1fr}h1{font-size:32px}}
-  .card{background:#1A171D;border:1px solid rgba(255,255,255,.06);border-radius:18px;padding:24px}
+  /* ===== Trust bar ===== */
+  .trust{border-top:1px solid rgba(255,255,255,.06);border-bottom:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.02)}
+  .trust .wrap{display:flex;justify-content:space-around;flex-wrap:wrap;gap:24px;padding:30px 24px;text-align:center}
+  .trust b{display:block;font-size:30px;font-weight:900}
+  .trust span{font-size:13px;color:var(--muted)}
+
+  /* ===== Concept ===== */
+  .concept{text-align:center;padding:80px 24px 64px}
+  .concept h2{font-size:30px;font-weight:900;margin-bottom:18px;line-height:1.4}
+  .concept p{color:#d6cfdd;max-width:640px;margin:0 auto;font-size:17px}
+
+  /* ===== Feature rows ===== */
+  .feature{padding:54px 0}
+  .feature .wrap{display:flex;gap:48px;align-items:center;justify-content:center;flex-wrap:wrap}
+  .feature.rev .wrap{flex-direction:row-reverse}
+  .feature-text{flex:1 1 380px;min-width:280px;max-width:480px}
+  .kicker{font-size:13px;font-weight:800;letter-spacing:.1em;color:#ff8fb4;text-transform:uppercase;margin-bottom:10px}
+  .feature-text h3{font-size:27px;font-weight:900;margin-bottom:14px;line-height:1.4}
+  .feature-text p{color:var(--muted);font-size:16px}
+  .feature-text ul{list-style:none;margin-top:18px;display:grid;gap:10px}
+  .feature-text li{position:relative;padding-left:26px;color:#e6e0ec;font-size:15px}
+  .feature-text li::before{content:"♪";position:absolute;left:0;color:var(--pink);font-weight:900}
+
+  /* ===== Extra grid ===== */
+  .more{padding:64px 0 24px}
+  .more h2{text-align:center;font-size:25px;font-weight:900;margin-bottom:34px}
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  @media(max-width:760px){.grid{grid-template-columns:1fr}}
+  .card{background:var(--bg2);border:1px solid rgba(255,255,255,.06);border-radius:18px;padding:24px}
   .card .ic{font-size:26px;margin-bottom:10px}
-  .card h3{font-size:17px;margin-bottom:6px}
-  .card p{color:#a59eac;font-size:14px}
+  .card h4{font-size:16px;margin-bottom:6px}
+  .card p{color:var(--muted);font-size:14px}
 
-  /* Footer */
-  footer{text-align:center;padding:48px 24px;color:#8a838f;font-size:13px;border-top:1px solid rgba(255,255,255,.06)}
+  /* ===== Price ===== */
+  .price{text-align:center;padding:72px 24px}
+  .price h2{font-size:26px;font-weight:900;margin-bottom:8px}
+  .price .sub{color:var(--muted);margin-bottom:30px}
+  .price-card{max-width:420px;margin:0 auto;background:linear-gradient(135deg,rgba(255,78,139,.14),rgba(255,154,77,.12));border:1px solid rgba(255,255,255,.12);border-radius:22px;padding:32px}
+  .price-card .big{font-size:34px;font-weight:900;margin:6px 0}
+  .price-card p{color:#e6e0ec;font-size:14px}
+
+  /* ===== Final CTA ===== */
+  .final{text-align:center;padding:40px 24px 80px}
+  .final h2{font-size:28px;font-weight:900;margin-bottom:22px;line-height:1.4}
+
+  /* ===== Footer ===== */
+  footer{text-align:center;padding:44px 24px;color:#8a838f;font-size:13px;border-top:1px solid rgba(255,255,255,.06)}
   footer a{color:#ffb3cd;text-decoration:none;margin:0 10px}
+
+  @media(max-width:760px){
+    h1{font-size:34px}
+    .hero{padding:48px 0 36px}
+    .hero-inner{justify-content:center;text-align:center}
+    .app-row{justify-content:center}
+    .hero-copy .lead{margin-left:auto;margin-right:auto}
+    .cta-row{justify-content:center}
+    .hero-phones{margin-top:20px}
+    .feature .wrap{gap:28px}
+  }
 </style>
 </head>
 <body>
 
+  <!-- HERO -->
   <section class="hero">
-    <span class="badge">カラオケ管理アプリ</span>
-    <div class="icon">🎤</div>
-    <h1>ずっと残る、<br>あなたのカラオケ記録</h1>
-    <p>点数もキーも、録音した歌声も。<br>写真アルバムのように、カラオケのアルバムを。</p>
-    <div>
-      <a class="cta" href="#">App Storeでダウンロード</a>
-    </div>
-  </section>
-
-  <section class="concept">
-    <div class="wrap">
-      <h2>あの頃、何を歌ってたっけ？</h2>
-      <p>その場で消えてしまいがちな“歌の記録”を、うたメモはぜんぶ残します。成長したとき振り返れる、あなただけのカラオケアルバム。録音は恥ずかしいけど、面白い記憶に。使い方はあなた次第。</p>
-    </div>
-  </section>
-
-  <section class="features">
-    <div class="wrap">
-      <h2>できること</h2>
-      <div class="grid">
-        <div class="card"><div class="ic">🎵</div><h3>曲ライブラリ管理</h3><p>歌いたい・練習中・得意曲をステータスで整理。タグやYouTubeも紐づけ。</p></div>
-        <div class="card"><div class="ic">📊</div><h3>歌唱記録（点数・キー）</h3><p>歌うたびに点数とキーを記録。最高点や平均点が見えてくる。</p></div>
-        <div class="card"><div class="ic">🎙️</div><h3>カラオケモード</h3><p>カラオケ中のライブ記録。1回の外出をまるごとセッションで残す。</p></div>
-        <div class="card"><div class="ic">🔊</div><h3>録音して振り返り</h3><p>自分の歌声を録音して、曲ごとに紐づけ。上達を耳で確かめよう。</p></div>
-        <div class="card"><div class="ic">📝</div><h3>セットリスト</h3><p>よく歌う曲を保存。カラオケ前の作戦づくりに。</p></div>
-        <div class="card"><div class="ic">📈</div><h3>統計・グラフ</h3><p>点数の推移やよく歌う曲を可視化。練習のモチベに。</p></div>
+    <div class="wrap hero-inner">
+      <div class="hero-copy">
+        <span class="badge">🎤 カラオケ記録アプリ</span>
+        <div class="app-row">
+          <div class="app-icon">🎤</div>
+          <div class="app-name">うたメモ<span>UtaMemo for iPhone</span></div>
+        </div>
+        <h1>ずっと残る、<br><span class="grad-text">あなたのカラオケ記録</span></h1>
+        <p class="lead">点数もキーも、録音した歌声も。<br>写真アルバムのように、カラオケのアルバムを。</p>
+        <div class="cta-row">
+          <a class="cta" href="#download">App Storeでダウンロード</a>
+          <a class="cta ghost" href="#features">できることを見る</a>
+        </div>
+      </div>
+      <div class="hero-phones">
+        <div class="phone"><img src="./assets/screen-songs.png" alt="曲リスト画面"></div>
+        <div class="phone"><img src="./assets/screen-detail.png" alt="曲ごとのスコア推移画面"></div>
       </div>
     </div>
   </section>
 
+  <!-- TRUST -->
+  <div class="trust">
+    <div class="wrap">
+      <div><b class="grad-text">点数</b><span>歌うたびに記録</span></div>
+      <div><b class="grad-text">録音</b><span>歌声を残して振り返り</span></div>
+      <div><b class="grad-text">統計</b><span>上達がグラフで見える</span></div>
+      <div><b class="grad-text">無料</b><span>30曲まで使える</span></div>
+    </div>
+  </div>
+
+  <!-- CONCEPT -->
+  <section class="concept">
+    <div class="wrap">
+      <h2>あの頃、何を歌ってたっけ？</h2>
+      <p>カラオケの点数も、歌ったキーも、その場で消えていく。写真アルバムはあるのに、カラオケのアルバムはなかった。うたメモは、あなたの“歌の歴史”をぜんぶ残します。</p>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <div id="features"></div>
+
+  <section class="feature">
+    <div class="wrap">
+      <div class="phone"><img src="./assets/screen-songs.png" alt="曲ライブラリ画面"></div>
+      <div class="feature-text">
+        <div class="kicker">Song Library</div>
+        <h3>歌える曲も、練習中の曲も。<br>自分だけの曲帳に。</h3>
+        <p>アルバムアートは自動取得。ステータスとタグでサッと整理できます。</p>
+        <ul>
+          <li>得意曲・歌える・練習中・歌いたいで色分け</li>
+          <li>アルバムアートを自動表示でひと目でわかる</li>
+          <li>タグ・メモ・YouTube参考動画も紐づけ</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="feature rev">
+    <div class="wrap">
+      <div class="phone"><img src="./assets/screen-detail.png" alt="スコア推移画面"></div>
+      <div class="feature-text">
+        <div class="kicker">Score & Growth</div>
+        <h3>1曲ごとに、上達が見える。</h3>
+        <p>歌うたびに点数とキーを記録。最高点・平均点・スコア推移がグラフでひと目に。参考動画もその場で再生できます。</p>
+        <ul>
+          <li>最高点・平均点・歌唱回数をまとめて表示</li>
+          <li>スコア推移グラフで成長を実感</li>
+          <li>参考動画をアプリ内ですぐチェック</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="feature">
+    <div class="wrap">
+      <div class="phone"><img src="./assets/screen-record.png" alt="録音画面"></div>
+      <div class="feature-text">
+        <div class="kicker">Voice Memo</div>
+        <h3>自分の歌声を、録音して振り返り。</h3>
+        <p>あとで聴いてガックリ？満悦？使い方はあなた次第。曲ごとに紐づけて、上達を耳で確かめよう。</p>
+        <ul>
+          <li>ワンタップで歌声を録音</li>
+          <li>曲や日付に紐づけて整理</li>
+          <li>振り返りメモで気づきを残せる</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="feature rev">
+    <div class="wrap">
+      <div class="phone"><img src="./assets/screen-stats.png" alt="統計画面"></div>
+      <div class="feature-text">
+        <div class="kicker">Statistics</div>
+        <h3>歌うほど、データが育つ。</h3>
+        <p>歌った曲数・総歌唱回数・カラオケ回数・自己最高点。月別の歌唱回数もグラフで可視化。続けるほど見返すのが楽しくなります。</p>
+        <ul>
+          <li>自己最高点や総歌唱回数を一覧で</li>
+          <li>月別の歌唱回数を棒グラフで表示</li>
+          <li>履歴からいつ何を歌ったか振り返り</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- MORE -->
+  <section class="more">
+    <div class="wrap">
+      <h2>さらに、こんなこともできる</h2>
+      <div class="grid">
+        <div class="card"><div class="ic">🎙️</div><h4>カラオケモード</h4><p>カラオケ中のライブ記録。1回の外出をまるごと「セッション」で残せる。</p></div>
+        <div class="card"><div class="ic">📝</div><h4>セットリスト</h4><p>よく歌う曲を保存。カラオケ前の作戦づくりや持ち歌管理に。</p></div>
+        <div class="card"><div class="ic">🌙</div><h4>ダーク／ライト対応</h4><p>お好みの外観に切り替え。端末の設定にも追従できます。</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICE -->
+  <section class="price" id="download">
+    <h2>まずは無料で。</h2>
+    <p class="sub">30曲まで無料。気に入ったらプレミアムへ。</p>
+    <div class="price-card">
+      <div class="ic" style="font-size:30px">⭐️</div>
+      <div class="big grad-text">プレミアム</div>
+      <p>曲数無制限・セットリスト無制限・広告なし。<br>買い切りプランで、ずっと使えます。</p>
+      <a class="cta" style="margin-top:22px" href="#">App Storeでダウンロード</a>
+    </div>
+  </section>
+
+  <!-- FINAL -->
+  <section class="final">
+    <h2>あなたのカラオケを、<br>ただの一夜かぎりにしない。</h2>
+    <a class="cta" href="#">うたメモを始める</a>
+  </section>
+
+  <!-- FOOTER -->
   <footer>
     <p>うたメモ</p>
     <p style="margin-top:10px">
